@@ -55,7 +55,7 @@ def train(args, train_dataset, model, eval_dataset):
             
             a_loss = loss_fn(a_logits, senti_labels)
             ea_losses += ea_loss.item()
-            iea_losses += iea_loss.item()
+            # iea_losses += iea_loss.item()
             a_losses += a_loss.item()
 
             # ablation study
@@ -65,7 +65,7 @@ def train(args, train_dataset, model, eval_dataset):
                 torch.cuda.empty_cache()
             elif args.multi_task == 'no_iea':
                 loss =  (1-args.lamda) * ea_loss +  args.lamda * a_loss
-                del iea_loss
+                # del iea_loss
                 torch.cuda.empty_cache()
             elif args.multi_task == 'no_all':
                 loss =  a_loss

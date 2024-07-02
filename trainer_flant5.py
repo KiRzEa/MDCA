@@ -48,10 +48,12 @@ def train(args, train_dataset, model, eval_dataset):
             model.train()
             inputs, senti_labels = get_input_from_batch(args, batch)
             inputs['is_eval'] = False
-            a_loss, ea_loss, iea_loss = model(**inputs)
+            # a_loss, ea_loss, iea_loss = model(**inputs)
+            a_loss, ea_loss = model(**inputs)
+
 
             ea_losses += ea_loss.item()
-            iea_losses += iea_loss.item()
+            # iea_losses += iea_loss.item()
             a_losses += a_loss.item()
   
             # ablation study
