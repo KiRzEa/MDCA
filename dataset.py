@@ -106,7 +106,8 @@ class Twitter_Dataset_Bart(Dataset):
         return (torch.tensor(a_input_ids), torch.tensor(a_attention_mask), torch.tensor(cls_indexer),
                 torch.tensor(ea_input_ids), torch.tensor(ea_attention_mask), torch.tensor(ea_output_labels), 
                 # torch.tensor(iea_input_ids), torch.tensor(iea_attention_mask), torch.tensor(iea_output_labels), 
-                torch.from_numpy(image_feature), torch.tensor(sentiment_label))
+                # torch.from_numpy(image_feature),
+                torch.tensor(sentiment_label))
         
 
 
@@ -211,7 +212,8 @@ class Twitter_Dataset_FlanT5(Dataset):
         return (torch.tensor(a_input_ids), torch.tensor(a_attention_mask), torch.tensor(a_output_labels),
                 torch.tensor(ea_input_ids), torch.tensor(ea_attention_mask), torch.tensor(ea_output_labels),
                 # torch.tensor(iea_input_ids), torch.tensor(iea_attention_mask), torch.tensor(iea_output_labels),
-                torch.from_numpy(image_feature), torch.tensor(sentiment_label))
+                # torch.from_numpy(image_feature), 
+                torch.tensor(sentiment_label))
 
 
 
