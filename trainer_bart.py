@@ -49,7 +49,9 @@ def train(args, train_dataset, model, eval_dataset):
             model.train()
             inputs, senti_labels = get_input_from_batch(args, batch)
             inputs['is_eval'] = False
-            a_logits, ea_loss, iea_loss = model(**inputs)
+            # a_logits, ea_loss, iea_loss = model(**inputs)
+            a_logits, ea_loss = model(**inputs)
+
             
             a_loss = loss_fn(a_logits, senti_labels)
             ea_losses += ea_loss.item()
