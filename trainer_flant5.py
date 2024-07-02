@@ -129,20 +129,20 @@ def evaluate(args, eval_dataset, model, is_test=False):
 
             a_pred_sequences.extend(a_sequence)
             ea_pred_sequences.extend(ea_sequence)
-            iea_pred_sequences.extend(iea_sequence)
+            # iea_pred_sequences.extend(iea_sequence)
             out_label_ids.extend(senti_labels.detach().cpu().numpy())
 
     a_preds = parse_sequences(a_pred_sequences)
     ea_preds = parse_sequences(ea_pred_sequences)
-    iea_preds = parse_sequences(iea_pred_sequences)
+    # iea_preds = parse_sequences(iea_pred_sequences)
 
     a_result = compute_metrics(a_preds, out_label_ids)
     ea_result = compute_metrics(ea_preds, out_label_ids)
-    iea_result = compute_metrics(iea_preds, out_label_ids)
+    # iea_result = compute_metrics(iea_preds, out_label_ids)
     
     a_results.update(a_result)
     ea_results.update(ea_result)
-    iea_results.update(iea_result)
+    # iea_results.update(iea_result)
 
     results = {'a_results': a_results, 'ea_results': ea_results, 'iea_results': iea_results}
     results['avg_results'] = {}
@@ -182,15 +182,23 @@ def evaluate(args, eval_dataset, model, is_test=False):
             
     if is_test:
         pred_data = []
-        for a_p, a_s, ea_p, ea_s, iea_p, iea_s, l in zip(a_preds.tolist(), a_pred_sequences, ea_preds.tolist(), ea_pred_sequences, iea_preds.tolist(), iea_pred_sequences, out_label_ids):
+        # for a_p, a_s, ea_p, ea_s, iea_p, iea_s, l in zip(a_preds.tolist(), a_pred_sequences, ea_preds.tolist(), ea_pred_sequences, iea_preds.tolist(), iea_pred_sequences, out_label_ids):
+        #     data = {}
+        #     data['a_pred'] = a_p
+        #     data['ea_pred'] = ea_p
+        #     data['iea_pred'] = iea_p
+        #     data['label'] = int(l)
+        #     data['a_sequence'] = a_s
+        #     data['ea_sequence'] = ea_s
+        #     data['iea_sequence'] = iea_s
+        #     pred_data.append(data)
+        for a_p, a_s, ea_p, ea_s, l in zip(a_preds.tolist(), a_pred_sequences, ea_preds.tolist(), ea_pred_sequences, out_label_ids):
             data = {}
             data['a_pred'] = a_p
             data['ea_pred'] = ea_p
-            data['iea_pred'] = iea_p
             data['label'] = int(l)
             data['a_sequence'] = a_s
             data['ea_sequence'] = ea_s
-            data['iea_sequence'] = iea_s
             pred_data.append(data)
 
         pred_file = os.path.join(args.save_model_dir, 'pred_results.json')
@@ -223,12 +231,12 @@ def get_input_from_batch(args, batch):
             'ea_input_ids': batch[3].to(args.device),
             'ea_attention_mask': batch[4].to(args.device),
             'ea_decoder_output_labels': batch[5].to(args.device),
-            'iea_input_ids': batch[6].to(args.device),
-            'iea_attention_mask': batch[7].to(args.device),
-            'iea_decoder_output_labels': batch[8].to(args.device),
-            'image_feature': batch[9].to(args.device),
+            # 'iea_input_ids': batch[6].to(args.device),
+            # 'iea_attention_mask': batch[7].to(args.device),
+            # 'iea_decoder_output_labels': batch[8].to(args.device),
+            'image_feature': batch[6].to(args.device),
             }
-    sentiment_labels = batch[10].to(args.device)
+    sentiment_labels = batch[7].to(args.device)
     return inputs, sentiment_labels
 
 def save_model(save_dir, model):
