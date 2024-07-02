@@ -214,7 +214,8 @@ def collate_fn_bart(batch):
     Pad sentence a batch.
     Turn all into tensors.
     '''
-    a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, iea_input_ids, iea_attention_mask, iea_output_labels, image_feature, sentiment_labels = zip(*batch)
+    # a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, iea_input_ids, iea_attention_mask, iea_output_labels, image_feature, sentiment_labels = zip(*batch)
+    a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, image_feature, sentiment_labels = zip(*batch)
 
     a_input_ids = pad_sequence(a_input_ids, batch_first=True, padding_value=1)
     cls_indexer = torch.tensor(cls_indexer)
