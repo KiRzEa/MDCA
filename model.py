@@ -20,7 +20,9 @@ class MDCABartModel(nn.Module):
         self.ea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'ea_generation_config.json')
         # self.iea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'iea_generation_config.json')
 
-    def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids, iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
+    # def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids, iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
+    def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, image_feature, is_eval=False):
+
         img_feat = self.img_fc(image_feature)
 
         a_encoder_inputs_embeds = self.text_embeddings(a_input_ids)   # (B, L, H)
@@ -70,8 +72,10 @@ class MDCAFlanT5Model(nn.Module):
         self.ea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'ea_generation_config.json')
         # self.iea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'iea_generation_config.json')
 
-    def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids,
-                iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
+    # def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids,
+    #             iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
+    def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels,
+                image_feature, is_eval=False):
         img_feat = self.img_fc(image_feature)
 
         a_encoder_inputs_embeds = self.text_embeddings(a_input_ids)  # (B, L, H)
