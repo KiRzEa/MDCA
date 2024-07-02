@@ -14,16 +14,16 @@ class MDCABartModel(nn.Module):
         self.bart.resize_token_embeddings(len(args.tokenizer))
         self.text_embeddings = self.bart.get_input_embeddings()
         
-        self.img_fc = nn.Linear(args.img_hidden_size, args.hidden_size)
+        # self.img_fc = nn.Linear(args.img_hidden_size, args.hidden_size)
         self.classify_fc = nn.Linear(args.hidden_size, args.num_classes)
 
         self.ea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'ea_generation_config.json')
         # self.iea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'iea_generation_config.json')
 
     # def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids, iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
-    def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, image_feature, is_eval=False):
+    def forward(self, a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, is_eval=False):
 
-        img_feat = self.img_fc(image_feature)
+        # img_feat = self.img_fc(image_feature)
 
         a_encoder_inputs_embeds = self.text_embeddings(a_input_ids)   # (B, L, H)
         # a_encoder_inputs_embeds = torch.cat([a_encoder_inputs_embeds[:, :3, :], img_feat, a_encoder_inputs_embeds[:, 3:, :]], dim=1)  # <s>qa: <img>img_feat
@@ -66,7 +66,7 @@ class MDCAFlanT5Model(nn.Module):
         self.t5.resize_token_embeddings(len(args.tokenizer))
         self.text_embeddings = self.t5.get_input_embeddings()
 
-        self.img_fc = nn.Linear(args.img_hidden_size, args.hidden_size)
+        # self.img_fc = nn.Linear(args.img_hidden_size, args.hidden_size)
 
         self.a_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'a_generation_config.json')
         self.ea_generation_config = GenerationConfig.from_pretrained(args.pretrained_model_dir, 'ea_generation_config.json')
@@ -74,9 +74,8 @@ class MDCAFlanT5Model(nn.Module):
 
     # def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, iea_input_ids,
     #             iea_attention_mask, iea_decoder_output_labels, image_feature, is_eval=False):
-    def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels,
-                image_feature, is_eval=False):
-        img_feat = self.img_fc(image_feature)
+    def forward(self, a_input_ids, a_attention_mask, a_decoder_output_labels, ea_input_ids, ea_attention_mask, ea_decoder_output_labels, is_eval=False):
+        # img_feat = self.img_fc(image_feature)
 
         a_encoder_inputs_embeds = self.text_embeddings(a_input_ids)  # (B, L, H)
         # a_encoder_inputs_embeds = torch.cat([a_encoder_inputs_embeds[:, :2, :], img_feat, a_encoder_inputs_embeds[:, 2:, :]], dim=1)  # qa: <img>img_feat

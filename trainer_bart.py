@@ -158,13 +158,16 @@ def evaluate(args, eval_dataset, model, is_test=False):
     ea_results.update(ea_result)
     # iea_results.update(iea_result)
 
-    results = {'a_results': a_results, 'ea_results': ea_results, 'iea_results': iea_results}
+    # results = {'a_results': a_results, 'ea_results': ea_results, 'iea_results': iea_results}
+    results = {'a_results': a_results, 'ea_results': ea_results}
     results['avg_results'] = {}
     
     # ablation study
     if args.multi_task == 'multi_task':
-        results['avg_results']['acc'] = (results['a_results']['acc'] + results['ea_results']['acc'] + results['iea_results']['acc']) / 3
-        results['avg_results']['f1'] = (results['a_results']['f1'] + results['ea_results']['f1'] +  results['iea_results']['f1']) / 3
+        # results['avg_results']['acc'] = (results['a_results']['acc'] + results['ea_results']['acc'] + results['iea_results']['acc']) / 3
+        # results['avg_results']['f1'] = (results['a_results']['f1'] + results['ea_results']['f1'] +  results['iea_results']['f1']) / 3
+        results['avg_results']['acc'] = (results['a_results']['acc'] + results['ea_results']['acc']) / 2
+        results['avg_results']['f1'] = (results['a_results']['f1'] + results['ea_results']['f1'] ) / 2
     elif args.multi_task == 'no_iea':
         results['avg_results']['acc'] = (results['a_results']['acc'] + results['ea_results']['acc']) / 2
         results['avg_results']['f1'] = (results['a_results']['f1'] + results['ea_results']['f1'] ) / 2
@@ -248,9 +251,9 @@ def get_input_from_batch(args, batch):
             # 'iea_input_ids': batch[6].to(args.device),
             # 'iea_attention_mask': batch[7].to(args.device),
             # 'iea_decoder_output_labels': batch[8].to(args.device),
-            'image_feature': batch[6].to(args.device),
+            # 'image_feature': batch[6].to(args.device),
             }
-    sentiment_labels = batch[7].to(args.device)
+    sentiment_labels = batch[6].to(args.device)
     return inputs, sentiment_labels
 
 def save_model(save_dir, model):

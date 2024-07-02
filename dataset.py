@@ -12,10 +12,10 @@ class Twitter_Dataset_Bart(Dataset):
         # train.json captions.json images_feature
         self.args = args
         self.data_path = os.path.join(args.data_dir, args.dataset_name)
-        self.captions_path = os.path.join(self.data_path, 'captions.json')
-        self.images_feature_path = os.path.join(self.data_path, 'images_feature')
+        # self.captions_path = os.path.join(self.data_path, 'captions.json')
+        # self.images_feature_path = os.path.join(self.data_path, 'images_feature')
         
-        self.caption_data = self.get_captions(self.captions_path)
+        # self.caption_data = self.get_captions(self.captions_path)
     
         if split == 'train':
             self.data_set = json.load(
@@ -57,16 +57,19 @@ class Twitter_Dataset_Bart(Dataset):
 
     def __getitem__(self, index):
         data = self.data_set[index]
-        image_id = data['image']
-        sentiment_label = data['label'] 
-        captions = self.caption_data[image_id] 
-        image_feature= self.get_image_feature(image_id)  # np (1,196,768)
+        # image_id = data['image']
+        # sentiment_label = data['label'] 
+        # captions = self.caption_data[image_id] 
+        # image_feature= self.get_image_feature(image_id)  # np (1,196,768)
         
         # a_input_sentence, ea_input_sentence, iea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
         # ea_output_sentence, iea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
 
-        a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
-        ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
+        # a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
+        # ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
+
+        a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'])
+        ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'])
         
         # input
         a_input_tokens = self.args.tokenizer.tokenize(a_input_sentence)
@@ -112,10 +115,10 @@ class Twitter_Dataset_FlanT5(Dataset):
 
         self.args = args
         self.data_path = os.path.join(args.data_dir, args.dataset_name)
-        self.captions_path = os.path.join(self.data_path, 'captions.json')
-        self.images_feature_path = os.path.join(self.data_path, 'images_feature')
+        # self.captions_path = os.path.join(self.data_path, 'captions.json')
+        # self.images_feature_path = os.path.join(self.data_path, 'images_feature')
 
-        self.caption_data = self.get_captions(self.captions_path)
+        # self.caption_data = self.get_captions(self.captions_path)
 
         if split == 'train':
             self.data_set = json.load(
@@ -140,7 +143,7 @@ class Twitter_Dataset_FlanT5(Dataset):
         image_feature = np.load(os.path.join(self.images_feature_path, image_id[:-4] + '.npz'))['embedding']
         return image_feature
 
-    def get_input_sentence(self, sentence, aspect, caption):
+    def get_input_sentence(self, sentence, aspect):
         # a_input_sentence = "qa: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}".format(sentence, aspect)
         # ea_input_sentence = "qea: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}.".format(sentence, aspect)
         # iea_input_sentence = "qiea: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}.".format(sentence, aspect)
@@ -148,7 +151,7 @@ class Twitter_Dataset_FlanT5(Dataset):
         ea_input_sentence = "qea: " + "sentence: {} aspect: {}.".format(sentence, aspect)
         return a_input_sentence, ea_input_sentence#, iea_input_sentence
 
-    def get_output_sentence(self, label, explanation, i_explanation):
+    def get_output_sentence(self, label, explanation):
         sentiment_map = {'0': 'neutral', '1': 'positive', '2': 'negative'}
         sentiment = sentiment_map[str(label)]
         a_output_sentence = '<emotion>{}</emotion>'.format(sentiment)
@@ -159,15 +162,18 @@ class Twitter_Dataset_FlanT5(Dataset):
 
     def __getitem__(self, index):
         data = self.data_set[index]
-        image_id = data['image']
-        sentiment_label = data['label']
-        captions = self.caption_data[image_id]  
-        image_feature= self.get_image_feature(image_id)  # np (1,196,768)
+        # image_id = data['image']
+        # sentiment_label = data['label']
+        # captions = self.caption_data[image_id]  
+        # image_feature= self.get_image_feature(image_id)  # np (1,196,768)
         # a_input_sentence, ea_input_sentence, iea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
         # a_output_sentence, ea_output_sentence, iea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
 
-        a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
-        a_output_sentence, ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
+        # a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
+        # a_output_sentence, ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'], data['image_response'])
+
+        a_input_sentence, ea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'])
+        a_output_sentence, ea_output_sentence = self.get_output_sentence(sentiment_label, data['response'])
         
         a_input_tokens = self.args.tokenizer.tokenize(a_input_sentence)
         a_input_ids = self.args.tokenizer.convert_tokens_to_ids(a_input_tokens)
@@ -224,7 +230,7 @@ def collate_fn_bart(batch):
     # iea_input_ids = pad_sequence(iea_input_ids, batch_first=True, padding_value=1)
     # iea_output_labels = pad_sequence(iea_output_labels, batch_first=True, padding_value=-100)
     
-    image_feature = pad_sequence(image_feature, batch_first=True, padding_value=0)
+    # image_feature = pad_sequence(image_feature, batch_first=True, padding_value=0)
      
     a_attention_mask = pad_sequence(a_attention_mask, batch_first=True, padding_value=0)
     ea_attention_mask= pad_sequence(ea_attention_mask, batch_first=True, padding_value=0)
@@ -233,7 +239,7 @@ def collate_fn_bart(batch):
     sentiment_labels = torch.tensor(sentiment_labels)
 
     # return a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, iea_input_ids, iea_attention_mask, iea_output_labels, image_feature, sentiment_labels
-    return a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, image_feature, sentiment_labels
+    return a_input_ids, a_attention_mask, cls_indexer, ea_input_ids, ea_attention_mask, ea_output_labels, sentiment_labels
 
 
 def collate_fn_flant5(batch):
@@ -251,7 +257,7 @@ def collate_fn_flant5(batch):
     # iea_input_ids = pad_sequence(iea_input_ids, batch_first=True, padding_value=0)
     # iea_output_labels = pad_sequence(iea_output_labels, batch_first=True, padding_value=-100)
 
-    image_feature = pad_sequence(image_feature, batch_first=True, padding_value=0)
+    # image_feature = pad_sequence(image_feature, batch_first=True, padding_value=0)
 
     a_attention_mask = pad_sequence(a_attention_mask, batch_first=True, padding_value=0)
     ea_attention_mask = pad_sequence(ea_attention_mask, batch_first=True, padding_value=0)
@@ -260,7 +266,7 @@ def collate_fn_flant5(batch):
     sentiment_labels = torch.tensor(sentiment_labels)
 
     # return a_input_ids, a_attention_mask, a_output_labels, ea_input_ids, ea_attention_mask, ea_output_labels, iea_input_ids, iea_attention_mask, iea_output_labels, image_feature, sentiment_labels
-    return a_input_ids, a_attention_mask, a_output_labels, ea_input_ids, ea_attention_mask, ea_output_labels, image_feature, sentiment_labels
+    return a_input_ids, a_attention_mask, a_output_labels, ea_input_ids, ea_attention_mask, ea_output_labels, sentiment_labels
 
 
 
