@@ -171,10 +171,10 @@ def evaluate(args, eval_dataset, model, is_test=False):
     with open(output_eval_file, 'a+') as writer:
         if is_test:
             logger.info('***** Test results *****')
-            writer.write('***** Test results *****')
+            writer.write('***** Test results *****\n')
         else:
             logger.info('***** Eval results *****')
-            writer.write('***** Eval results *****')
+            writer.write('***** Eval results *****\n')
         for type, result in results.items():
             logger.info("the result of %s", type)
             writer.write("#")
