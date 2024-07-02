@@ -58,7 +58,7 @@ class Twitter_Dataset_Bart(Dataset):
     def __getitem__(self, index):
         data = self.data_set[index]
         # image_id = data['image']
-        # sentiment_label = data['label'] 
+        sentiment_label = data['label'] 
         # captions = self.caption_data[image_id] 
         # image_feature= self.get_image_feature(image_id)  # np (1,196,768)
         
@@ -163,7 +163,7 @@ class Twitter_Dataset_FlanT5(Dataset):
     def __getitem__(self, index):
         data = self.data_set[index]
         # image_id = data['image']
-        # sentiment_label = data['label']
+        sentiment_label = data['label']
         # captions = self.caption_data[image_id]  
         # image_feature= self.get_image_feature(image_id)  # np (1,196,768)
         # a_input_sentence, ea_input_sentence, iea_input_sentence = self.get_input_sentence(data['sentence'], data['aspect'], captions[self.args.cap_index])
