@@ -60,7 +60,8 @@ def train(args, train_dataset, model, eval_dataset):
 
             # ablation study
             if args.multi_task == 'no_ea':
-                loss =  (1-args.lamda) * iea_loss +  args.lamda * a_loss
+                # loss =  (1-args.lamda) * iea_loss +  args.lamda * a_loss
+                loss =  a_loss
                 del ea_loss
                 torch.cuda.empty_cache()
             elif args.multi_task == 'no_iea':
@@ -72,7 +73,7 @@ def train(args, train_dataset, model, eval_dataset):
                 del ea_loss, iea_loss
                 torch.cuda.empty_cache()
             else:
-                loss = (1-args.lamda) / 2 * ea_loss + (1-args.lamda) / 2 * iea_loss + args.lamda * a_loss
+                loss = (1 - args.lamda) * ea_loss +  args.lamda * a_loss 
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
