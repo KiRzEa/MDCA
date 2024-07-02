@@ -45,7 +45,7 @@ def train(args, train_dataset, model, eval_dataset):
     train_iterator = trange(int(args.num_train_epochs), desc="Epoch")
     for epoch in train_iterator:
         ea_losses, iea_losses, a_losses = 0, 0, 0
-        for step, batch in enumerate(train_dataloader):
+        for step, batch in trange(enumerate(train_dataloader)):
             model.train()
             inputs, senti_labels = get_input_from_batch(args, batch)
             inputs['is_eval'] = False
