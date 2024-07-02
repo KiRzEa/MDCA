@@ -40,7 +40,7 @@ class Twitter_Dataset_Bart(Dataset):
         image_feature = np.load(os.path.join(self.images_feature_path, image_id[:-4] + '.npz'))['embedding']
         return image_feature
     
-    def get_input_sentence(self, sentence, aspect, caption):
+    def get_input_sentence(self, sentence, aspect):
         # a_input_sentence = "qa: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}".format(sentence, aspect)
         # ea_input_sentence = "qea: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}.".format(sentence, aspect)
         # iea_input_sentence = "qiea: <image></image> caption: {} ".format(caption) + "sentence: {} aspect: {}.".format(sentence, aspect)
@@ -48,7 +48,7 @@ class Twitter_Dataset_Bart(Dataset):
         ea_input_sentence = "qea: " + "sentence: {} aspect: {}.".format(sentence, aspect)
         return a_input_sentence, ea_input_sentence#, iea_input_sentence
     
-    def get_output_sentence(self, label, explanation, i_explanation):
+    def get_output_sentence(self, label, explanation):
         sentiment_map = {'0': 'neutral', '1': 'positive', '2': 'negative'}
         sentiment = sentiment_map[str(label)]
         ea_output_sentence = '<explain>{}</explain><emotion>{}</emotion>'.format(explanation, sentiment)
