@@ -128,7 +128,7 @@ def evaluate(args, eval_dataset, model, is_test=False):
         with torch.no_grad():
             inputs, senti_labels = get_input_from_batch(args, batch)
             inputs['is_eval'] = True
-            a_sequence, ea_sequence, iea_sequence = model(**inputs)
+            a_sequence, ea_sequence = model(**inputs)
 
             a_pred_sequences.extend(a_sequence)
             ea_pred_sequences.extend(ea_sequence)
