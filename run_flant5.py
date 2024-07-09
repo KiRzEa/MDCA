@@ -28,7 +28,7 @@ def parse_args():
 
     parser.add_argument('--save_model_dir', type=str, default='./checkpoints/MDCA-Flan-T5', help='Path to checkpoints')
     parser.add_argument('--seed', type=int, default=3407, help='random seed for initialization')
-    parser.add_argument('--cuda_id', type=str, default='4', help='Choose which GPUs to run')
+    parser.add_argument('--cuda_id', type=str, default='0', help='Choose which GPUs to run')
 
     # Model parameters
     parser.add_argument("--img_hidden_size", default=768, type=int, help="Hidden size of image feature.")
