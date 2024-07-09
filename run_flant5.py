@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument('--dataset_name', type=str, default='political_twitter', choices=['twitter2015', 'twitter2017', 'political_twitter'])
     parser.add_argument('--data_dir', type=str, default='./data', help='A Directory of the data')
 
-    parser.add_argument('--pretrained_model_dir', type=str, default='./pretrained/flant5-base', help='Path to the pretrained model')
+    parser.add_argument('--pretrained_model_dir', type=str, default='./pretrained/flan-t5-base', help='Path to the pretrained model')
     parser.add_argument('--generation_config', type=str, default='generation_config.json', help='File name of generation_config')
 
     parser.add_argument('--save_model_dir', type=str, default='./checkpoints/MDCA-Flan-T5', help='Path to checkpoints')
@@ -93,7 +93,7 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     args.device = device
     logger.info('Device is %s', args.device)
-
+    print(args.device)
     # Set seed
     set_seed(args)
 
